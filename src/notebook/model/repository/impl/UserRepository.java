@@ -1,6 +1,7 @@
 package notebook.model.repository.impl;
 
 import notebook.model.dao.impl.FileOperation;
+import notebook.util.UserValidator;
 import notebook.util.mapper.impl.UserMapper;
 import notebook.model.User;
 import notebook.model.repository.GBRepository;
@@ -30,6 +31,8 @@ public class UserRepository implements GBRepository {
 
     @Override
     public User create(User user) {
+        UserValidator userValidator = new UserValidator();
+        user = userValidator.validate(user);
         List<User> users = findAll();
         long max = 0L;
         for (User u : users) {
