@@ -4,6 +4,7 @@ import notebook.controller.UserController;
 import notebook.model.User;
 import notebook.util.Commands;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class UserView {
@@ -13,13 +14,14 @@ public class UserView {
         this.userController = userController;
     }
 
-    public void run(){
+    public void run() {
         Commands com;
 
         while (true) {
             String command = prompt("Введите команду: ");
             com = Commands.valueOf(command);
-            if (com == Commands.EXIT) return;
+            if (com == Commands.EXIT)
+                return;
             switch (com) {
                 case CREATE:
                     User u = createUser();
@@ -38,6 +40,11 @@ public class UserView {
                 case UPDATE:
                     String userId = prompt("Enter user id: ");
                     userController.updateUser(userId, createUser());
+                    break;
+                case LIST:
+                    List<User> users = userController.readAll();
+                    System.out.println(users);
+                    break;
             }
         }
     }
