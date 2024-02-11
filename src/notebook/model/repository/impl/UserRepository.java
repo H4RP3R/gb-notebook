@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class UserRepository implements GBRepository {
@@ -129,5 +130,16 @@ public class UserRepository implements GBRepository {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @Override
+    public User read(Long userId) throws RuntimeException {
+        List<User> users = findAll();
+        for (User user : users) {
+            if (Objects.equals(user.getId(), userId)) {
+                return user;
+            }
+        }
+        throw new RuntimeException("User not found");
     }
 }

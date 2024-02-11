@@ -15,4 +15,6 @@ public interface GBRepository {
     Optional<User> update(Long userId, User update);
 
     void delete(Long id);
+
+    User read(Long userId);
 }
