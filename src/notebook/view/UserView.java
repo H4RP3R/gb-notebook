@@ -21,7 +21,7 @@ public class UserView {
 
         while (true) {
             String command = input.prompt("Введите команду: ");
-            com = Commands.valueOf(command);
+            com = Commands.valueOf(command.toUpperCase());
             if (com == Commands.EXIT)
                 return;
             switch (com) {
