@@ -64,6 +64,10 @@ public class UserRepository implements GBRepository {
                 .filter(u -> u.getId()
                         .equals(userId))
                 .findFirst().orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserValidator userValidator = new UserValidator();
+        update = userValidator.validate(update);
+
         editUser.setFirstName(update.getFirstName().isEmpty() ? editUser.getFirstName() : update.getFirstName());
         editUser.setLastName(update.getLastName().isEmpty() ? editUser.getLastName() : update.getLastName());
         editUser.setPhone(update.getPhone().isEmpty() ? editUser.getPhone() : update.getPhone());
