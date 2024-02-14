@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class UserRepository implements GBRepository {
@@ -54,16 +53,15 @@ public class UserRepository implements GBRepository {
 
     @Override
     public Optional<User> findById(Long id) {
-        return Optional.empty();
+        List<User> users = findAll();
+
+        return users.stream().filter(u -> u.getId().equals(id)).findFirst();
     }
 
     @Override
     public Optional<User> update(Long userId, User update) {
         List<User> users = findAll();
-        User editUser = users.stream()
-                .filter(u -> u.getId()
-                        .equals(userId))
-                .findFirst().orElseThrow(() -> new RuntimeException("User not found"));
+        User editUser = findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
         UserValidator userValidator = new UserValidator();
         update = userValidator.validate(update);
@@ -71,17 +69,17 @@ public class UserRepository implements GBRepository {
         editUser.setFirstName(update.getFirstName().isEmpty() ? editUser.getFirstName() : update.getFirstName());
         editUser.setLastName(update.getLastName().isEmpty() ? editUser.getLastName() : update.getLastName());
         editUser.setPhone(update.getPhone().isEmpty() ? editUser.getPhone() : update.getPhone());
+
+        users.set(users.indexOf(editUser), editUser);
         write(users);
+
         return Optional.of(update);
     }
 
     @Override
     public void delete(Long id) {
         List<User> users = findAll();
-        User deleteUser = users.stream()
-                .filter(u -> u.getId()
-                        .equals(id))
-                .findFirst().orElseThrow(() -> new RuntimeException("User not found"));
+        User deleteUser = findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
         users.remove(deleteUser);
         write(users);
@@ -137,13 +135,7 @@ public class UserRepository implements GBRepository {
     }
 
     @Override
-    public User read(Long userId) throws RuntimeException {
-        List<User> users = findAll();
-        for (User user : users) {
-            if (Objects.equals(user.getId(), userId)) {
-                return user;
-            }
-        }
-        throw new RuntimeException("User not found");
+    public User read(Long userId) {
+        return findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
