@@ -3,6 +3,7 @@ package notebook.view;
 import notebook.controller.UserController;
 import notebook.model.User;
 import notebook.util.Commands;
+import notebook.util.HelpMessage;
 import notebook.util.InputUtil;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class UserView {
 
     public void run() {
         Commands com;
+        HelpMessage.print();
 
         while (true) {
             String command = input.prompt("Введите команду: ");
@@ -50,6 +52,9 @@ public class UserView {
                 case DELETE:
                     userId = input.prompt("Enter user id: ");
                     userController.deleteUser(userId);
+                    break;
+                case HELP:
+                    HelpMessage.print();
                     break;
             }
         }
